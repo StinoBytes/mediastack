@@ -3,11 +3,11 @@
 | Service     | Port | Description                  |
 | ----------- | ---- | ---------------------------- |
 | Jellyfin    | 8096 | Media streaming server       |
-| Jellyseerr  | 8080 | Jellyfin request manager     |
+| Jellyseerr  | 5055 | Jellyfin request manager     |
 | Radarr      | 7878 | Automated movie downloader   |
 | Sonarr      | 8989 | Automated TV-show downloader |
 | Prowlarr    | 9696 | Indexer manager & aggregator |
-| qBittorrent | 8082 | Torrent client & Web UI      |
+| qBittorrent | 8080 | Torrent client & Web UI      |
 | Bazarr      | 6767 | Subtitle and metadata sync   |
 
 ## 1. Clone repository

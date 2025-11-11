@@ -29,7 +29,7 @@ services:
     volumes:
       - ${BASE_DIR}/config/jellyseerr:/app/config
     ports:
-      - "8080:5055"
+      - "5055:5055"
     restart: unless-stopped
 
   radarr:
@@ -94,13 +94,13 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - WEBUI_PORT=8082
+      - WEBUI_PORT=8080
       - TORRENTING_PORT=6881
     volumes:
       - ${BASE_DIR}/config/qbittorrent:/config
       - ${BASE_DIR}/downloads:/downloads
     ports:
-      - "8082:8082"
+      - "8080:8080"
       - "6881:6881"
       - "6881:6881/udp"
     restart: unless-stopped
