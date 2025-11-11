@@ -121,18 +121,6 @@ services:
       - "6767:6767"
     restart: unless-stopped
 
-  watchtower:
-    image: containrrr/watchtower:latest
-    container_name: watchtower
-    networks:
-      - mediastack
-    environment:
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_LABEL_ENABLE=true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
-
 networks:
   mediastack:
     driver: bridge
