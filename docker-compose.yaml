@@ -121,6 +121,20 @@ services:
       - "6767:6767"
     restart: unless-stopped
 
+  # Optional, to be able to use certain indexers in Prowlarr
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    networks:
+      - mediastack
+    environment:
+      - LOG_LEVEL=info
+    volumes:
+      - ${BASE_DIR}/config/flaresolverr:/config
+    ports:
+      - "8091:8091"
+    restart: unless-stopped
+
 networks:
   mediastack:
     driver: bridge
