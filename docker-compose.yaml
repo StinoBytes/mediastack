@@ -1,0 +1,139 @@
+services:
+  jellyfin:
+    image: linuxserver/jellyfin:latest
+    container_name: jellyfin
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${BASE_DIR}/config/jellyfin:/config
+      - ${BASE_DIR}/config/jellyfin_cache:/cache
+      - ${BASE_DIR}/media:/media
+    ports:
+      - "8096:8096"
+    restart: unless-stopped
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - JELLYFIN_URL=http://jellyfin:8096
+    volumes:
+      - ${BASE_DIR}/config/jellyseerr:/config
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - RADARR__AUTHENTICATION_METHOD=External
+      - RADARR__AUTHENTICATION_REQUIRED=Disabled
+    volumes:
+      - ${BASE_DIR}/config/radarr:/config
+      - ${BASE_DIR}/media:/media
+      - ${BASE_DIR}/downloads:/downloads
+    ports:
+      - "7878:7878"
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - SONARR__AUTHENTICATION_METHOD=External
+      - SONARR__AUTHENTICATION_REQUIRED=Disabled
+    volumes:
+      - ${BASE_DIR}/config/sonarr:/config
+      - ${BASE_DIR}/media:/media
+      - ${BASE_DIR}/downloads:/downloads
+    ports:
+      - "8989:8989"
+    restart: unless-stopped
+
+  prowlarr:
+    image: linuxserver/prowlarr:latest
+    container_name: prowlarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${BASE_DIR}/config/prowlarr:/config
+    ports:
+      - "9696:9696"
+    restart: unless-stopped
+
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    volumes:
+      - ${BASE_DIR}/config/qbittorrent:/config
+      - ${BASE_DIR}/downloads:/downloads
+    ports:
+      - "8082:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    restart: unless-stopped
+
+  bazarr:
+    image: linuxserver/bazarr:latest
+    container_name: bazarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${BASE_DIR}/config/bazarr:/config
+      - ${BASE_DIR}/media:/media
+    ports:
+      - "6767:6767"
+    restart: unless-stopped
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    networks:
+      - mediastack
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_LABEL_ENABLE=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+networks:
+  mediastack:
+    driver: bridge
+    name: mediastack
