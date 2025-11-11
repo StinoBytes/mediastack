@@ -1,5 +1,15 @@
 # StinoByte's Media Stack
 
+| Service     | Port | Description                  |
+| ----------- | ---- | ---------------------------- |
+| Jellyfin    | 8096 | Media streaming server       |
+| Jellyseerr  | 8080 | Jellyfin request manager     |
+| Radarr      | 7878 | Automated movie downloader   |
+| Sonarr      | 8989 | Automated TV-show downloader |
+| Prowlarr    | 9696 | Indexer manager & aggregator |
+| qBittorrent | 8082 | Torrent client & Web UI      |
+| Bazarr      | 6767 | Subtitle and metadata sync   |
+
 ## 1. Clone repository
 
 ```bash
@@ -17,7 +27,7 @@ cd mediastack
 Creates the necessary folder structure for the project:
 
 ```bash
-mkdir -p downloads media logs config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr
+mkdir -p downloads media/movies media/tv logs config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr
 ```
 
 (Optional) Sets the correct ownership to the newly created folders, just to be sure.
