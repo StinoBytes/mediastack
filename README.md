@@ -58,12 +58,6 @@ This will download the Docker Images and spin up the containers.
 docker compose up -d
 ```
 
-To stop the containers:
-
-```bash
-docker compose down
-```
-
 ## 5. Configure the services
 
 > [!NOTE]
@@ -130,3 +124,23 @@ docker compose down
 - Add Radarr and Sonarr with API keys.
 
 That should be it, you can select movies and shows in Jellyseer, the mediastack will do the rest! Once downloaded, you can watch with Jellyfin.
+
+## 6. Updating and stopping the containers
+
+To update the containers:
+
+```bash
+# 1. Update images
+docker compose pull
+# 2. Update containers
+docker compose up -d --build
+# 3. Remove old images
+docker image prune
+```
+
+
+To stop the containers:
+
+```bash
+docker compose down
+```
