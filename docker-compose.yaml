@@ -5,6 +5,8 @@ services:
     container_name: jellyfin
     networks:
       - mediastack
+    devices:
+      - /dev/dri:/dev/dri # HW acceleration for Intel/ATI/AMD. Comment block if you have issues
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
