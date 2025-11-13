@@ -2,7 +2,6 @@
 config/
 downloads/
 media/
-logs/
 
 # Files
 .env
