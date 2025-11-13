@@ -1,0 +1,7 @@
+# Folders
+config/
+downloads/
+media/
+
+# Files
+.env

@@ -1,0 +1,153 @@
+services:
+  # Media server
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    networks:
+      - mediastack
+    devices:
+      - /dev/dri:/dev/dri # HW acceleration for Intel/ATI/AMD. Comment block if you have issues
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - JELLYFIN_PublishedServerUrl=${SERVER_URL} # optional, autodiscovery
+    volumes:
+      - ${CONFIG_DIR}/jellyfin:/config
+      - ${TV_DIR}:/data/tvshows
+      - ${MOVIE_DIR}:/data/movies
+    ports:
+      - 8096:8096
+      # - 8920:8920 # optional for https webUI, need to set up own ceritificate
+      - 7359:7359/udp # optional, autodiscovery
+      - 1900:1900/udp # optional, autodiscovery
+    restart: unless-stopped
+
+  # Request manager
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - JELLYFIN_URL=http://jellyfin:8096
+      - LOG_LEVEL=debug
+    volumes:
+      - ${CONFIG_DIR}/jellyseerr:/app/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+
+  # Movie manager
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_DIR}/radarr:/config
+      - ${MOVIE_DIR}:/data/movies
+      - ${DOWNLOAD_DIR}:/data/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  # TV show manager
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_DIR}/sonarr:/config
+      - ${TV_DIR}:/data/tvshows
+      - ${DOWNLOAD_DIR}:/data/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  # Indexer manager for Sonarr/Radarr
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_DIR}/prowlarr:/config
+      - ${DOWNLOAD_DIR}:/data/downloads
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  # Subtitle manager
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_DIR}/bazarr:/config
+      - ${TV_DIR}:/data/tvshows
+      - ${MOVIE_DIR}:/data/movies
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  # Torrent client
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    volumes:
+      - ${CONFIG_DIR}/qbittorrent:/config
+      - ${DOWNLOAD_DIR}:/data/downloads
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+
+  # Optional, to be able to use certain indexers in Prowlarr
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    networks:
+      - mediastack
+    environment:
+      - LOG_LEVEL=info
+    volumes:
+      - ${CONFIG_DIR}/flaresolverr:/config
+    ports:
+      - 8091:8091
+    restart: unless-stopped
+
+networks:
+  mediastack:
+    driver: bridge
+    name: mediastack
