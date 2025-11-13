@@ -103,8 +103,8 @@ services:
       - TZ=${TZ}
     volumes:
       - ${CONFIG_DIR}/bazarr:/config
-      - ${MOVIE_DIR}:/movies
-      - ${TV_DIR}:/tv
+      - ${TV_DIR}:/data/tvshows
+      - ${MOVIE_DIR}:/data/movies
     ports:
       - 6767:6767
     restart: unless-stopped
