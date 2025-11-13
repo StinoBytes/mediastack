@@ -8,12 +8,16 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - JELLYFIN_PublishedServerUrl=${SERVER_URL} # autodiscovery
     volumes:
       - ${BASE_DIR}/config/jellyfin:/config
-      - ${BASE_DIR}/config/jellyfin_cache:/cache
-      - ${BASE_DIR}/media:/media
+      - ${TV_DIR}:/data/tvshows
+      - ${MOVIE_DIR}:/data/movies
     ports:
-      - "8096:8096"
+      - 8096:8096
+      # - 8920:8920 # optional for https webUI, need to set up own ceritificate
+      - 7359:7359/udp # autodiscovery
+      - 1900:1900/udp # autodiscovery
     restart: unless-stopped
 
   jellyseerr:

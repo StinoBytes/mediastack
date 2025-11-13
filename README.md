@@ -27,13 +27,13 @@ cd mediastack
 Creates the necessary folder structure for the project:
 
 ```bash
-mkdir -p downloads media/movies media/tv logs config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr
+mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr
 ```
 
 (Optional) Sets the correct ownership to the newly created folders, just to be sure.
 
 ```bash
-sudo chown -R $(id -u):$(id -g) downloads media logs config
+sudo chown -R $(id -u):$(id -g) downloads media config
 ```
 
 ## 3. Generate the .env file
@@ -41,10 +41,11 @@ sudo chown -R $(id -u):$(id -g) downloads media logs config
 This will create the necessary .env file which the Docker containers will use.
 
 ```bash
-printf 'PUID=%s\nPGID=%s\nTZ=%s\nBASE_DIR=${PWD}\n' \
+printf 'PUID=%s\nPGID=%s\nTZ=%s\nBASE_DIR=${PWD}\nTV_DIR=${PWD}/media/tv\nMOVIE_DIR=${PWD}/media/movies\nSERVER_URL=http://%s\n' \
        "$(id -u)" \
        "$(id -g)" \
        "$(timedatectl show --value --property=Timezone 2>/dev/null || echo Europe/London)" \
+       "$(ip route get 1.1.1.1 2>/dev/null | awk '{for(i=1;i<=NF;i++) if($i=="src"){print $(i+1); exit}}' || hostname -I | awk '{print $1}')" \
        > .env
 ```
 
