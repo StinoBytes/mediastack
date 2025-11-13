@@ -34,6 +34,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - JELLYFIN_URL=http://jellyfin:8096
+      - LOG_LEVEL=debug
     volumes:
       - ${CONFIG_DIR}/jellyseerr:/app/config
     ports:
