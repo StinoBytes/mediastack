@@ -122,7 +122,7 @@ docker compose down
 - Follow setup wizard (guide: https://jellyfin.org/docs/general/post-install/setup-wizard/).
 - Optional: Enable
 
-##### Jellyseer - http://localhost:5055
+#### Jellyseer - http://localhost:5055
 
 - Configure for Jellyfin
 - Enter Jellyfin url (http://jellyfin:8096) and enter email address, username and password.
