@@ -27,7 +27,7 @@ cd mediastack
 Creates the necessary folder structure for the project:
 
 ```bash
-mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr
+mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr config/flaresolverr
 ```
 
 (Optional) Sets the correct ownership to the newly created folders, just to be sure.
@@ -41,7 +41,7 @@ sudo chown -R $(id -u):$(id -g) downloads media config
 This will create the necessary .env file which the Docker containers will use.
 
 ```bash
-printf 'PUID=%s\nPGID=%s\nTZ=%s\nBASE_DIR=${PWD}\nTV_DIR=${PWD}/media/tv\nMOVIE_DIR=${PWD}/media/movies\nSERVER_URL=http://%s\n' \
+printf 'PUID=%s\nPGID=%s\nTZ=%s\nCONFIG_DIR=${PWD}/config\nDOWNLOAD_DIR=${PWD}/downloads\nTV_DIR=${PWD}/media/tv\nMOVIE_DIR=${PWD}/media/movies\nSERVER_URL=http://%s\n' \
        "$(id -u)" \
        "$(id -g)" \
        "$(timedatectl show --value --property=Timezone 2>/dev/null || echo Europe/London)" \
