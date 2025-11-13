@@ -1,4 +1,4 @@
-# StinoByte's Media Stack
+# Media Stack
 
 | Service      | Port | Description                                              |
 | ------------ | ---- | -------------------------------------------------------- |
@@ -67,17 +67,17 @@ docker compose down
 ## 5. Configure the services
 
 > [!NOTE]
-> If you run the services on another device, change `localhost` in the addresses to the server ip address.
+> If you run the services on another device, change `localhost` in the addresses to your server ip address.
 
 #### qBittorrent - http://localhost:8080
 
-- Log in with user 'admin' and temporary password which can be found in the docker logs (`docker logs qbittorrent`).
+- Log in with user 'admin' and temporary password which can be found in the docker logs (execute `docker logs qbittorrent` in a terminal on the device the containers run on).
 - Go to `Options > WebUI` and change the admin password. Optionally you can enable `Bypass authentication for clients on localhost` for your own convenience.
 - Scroll down and click `Save`.
 - Go to `Options > Downloads` and change Default Save Path to `/data/downloads` and click `Save`.
 
 > [!TIP]
-> From this point on it might be easier to follow this YouTube guide: https://www.youtube.com/watch?v=3k_MwE0Z3CE&t=876s together with the steps below.
+> For the Prowlarr-Sonarr-Radarr steps it might be easier to follow this YouTube guide along with the next steps: https://www.youtube.com/watch?v=3k_MwE0Z3CE&t=876s
 >
 > The guide uses slightly different ports and URL's but you should keep the ones mentioned in the steps below. Also skip the Lidarr and Backup parts (might be added later in this stack but for now it won't).
 
@@ -106,4 +106,27 @@ docker compose down
 - Go to `Indexers` and click `Sync App Indexers`.
 - For every indexer, go to settings, show advanced options and set your preferred setings for `Apps Minimum Seeders`, `Seed Ratio` and `Seed Time`, to for example 8, 1, 1.
 
-(YT tutorial only goes to this point, follow the guide from here.)
+(YT tutorial only goes to this point, follow the rest of this guide from here)
+
+#### Bazarr - http://localhost:6767
+
+- Follow the official guide, it is pretty straightforward. You can skip the `Port Mapping` steps for Sonarr and Radarr because the paths should be the same.<br>Guide: https://wiki.bazarr.media/Getting-Started/Setup-Guide/
+
+> [!TIP]
+> To find out which subtitle providers have a lot of content in your language, you can check https://wiki.bazarr.media/bazarr-stats/.
+
+- After this, follow the First time installation configuration: https://wiki.bazarr.media/Getting-Started/First-time-installation-configuration/
+
+#### Jellyfin - http://localhost:8096
+
+- Follow setup wizard (guide: https://jellyfin.org/docs/general/post-install/setup-wizard/).
+- Optional: Enable
+
+##### Jellyseer - http://localhost:5055
+
+- Configure for Jellyfin
+- Enter Jellyfin url (http://jellyfin:8096) and enter email address, username and password.
+- Sync libraries and do a Manual Library Scan.
+- Add Radarr and Sonarr with API keys.
+
+That should be it, you can select movies and shows in Jellyseer, the mediastack will do the rest! Once downloaded, you can watch with Jellyfin.
