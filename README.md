@@ -127,20 +127,37 @@ That should be it, you can select movies and shows in Jellyseer, the mediastack 
 
 ## 6. Updating and stopping the containers
 
-To update the containers:
+To update the containers manually, execute in root folder of the project (where the docker-compose.yaml file is).
 
 ```bash
 # 1. Update images
 docker compose pull
 # 2. Update containers
 docker compose up -d --build
-# 3. Remove old images
-docker image prune
+# 3. Remove old images of this container stack
+docker image prune -f --filter "label=mediastack"
 ```
 
+Or you can run the `update_containers.sh` script for a more automatic approach.
+
+> [!TIP]
+> If you run the `update_containers.sh` script through a cron job (for example weekly), you don't have to worry about updating yourself and always have the latest versions.<br>More info about cron jobs: https://www.geeksforgeeks.org/linux-unix/crontab-in-linux-with-examples/
 
 To stop the containers:
 
 ```bash
 docker compose down
 ```
+
+## 7. Relocating the downloads and/or media folders
+
+Because the use of the `.env` file created by following this guide, it is possible to put the `/downloads`, `/media/movies` and `/media/tv` folders in another location, even on another disk. This could come in handy if you run out of disk space.
+
+Steps to do this:
+
+1. Stop the containers with `docker compose down` from the root direcory of the project (where the `docker-compose.yaml` file is).
+2. Move any of these folders to a new location.
+3. Change the environment variables in the `.env` file with the **full path** of the new location. (e.g. `DOWNLOAD_DIR=<insert new full path here>` and/or `TV_DIR=<insert new full path here>` and/or `MOVIE_DIR=<insert new full path here>`).
+4. Rebuild and start the containers again from the root directory of the project with `docker compose up -d --build`.
+
+After doing this, **DO NOT regenerate the `.env` file** (step 3) because your changes will be overwritten and things will get messed up.

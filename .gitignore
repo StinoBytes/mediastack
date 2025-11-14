@@ -2,6 +2,7 @@
 config/
 downloads/
 media/
+update_logs/
 
 # Files
 .env
