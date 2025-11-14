@@ -127,7 +127,7 @@ That should be it, you can select movies and shows in Jellyseer, the mediastack 
 
 ## 6. Updating and stopping the containers
 
-To update the containers, execute in root folder of the project (where the docker-compose.yaml file is).
+To update the containers manually, execute in root folder of the project (where the docker-compose.yaml file is).
 
 ```bash
 # 1. Update images
@@ -137,6 +137,11 @@ docker compose up -d --build
 # 3. Remove old images of this container stack
 docker image prune -f --filter "label=mediastack"
 ```
+
+Or you can run the `update_containers.sh` script for a more automatic approach.
+
+> [!TIP]
+> If you run the `update_containers.sh` script through a cron job (for example weekly), you don't have to worry about updating yourself and always have the latest versions.<br>More info about cron jobs: https://www.geeksforgeeks.org/linux-unix/crontab-in-linux-with-examples/
 
 To stop the containers:
 
