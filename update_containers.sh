@@ -12,19 +12,10 @@ LOGFILE="$LOG_DIR/$(date '+%Y_%m_%d').log"
 
 exec > >(tee -a "$LOGFILE") 2>&1
 log() { printf '%s %s\n' "$(date -u '+%Y-%m-%d %H:%M:%S')" "$*"; }
-
 trap 'log "Script finished with status $?"' EXIT
-log "=== mediastack update started ==="
 
-if ! command -v docker &>/dev/null; then
-    log "ERROR: Docker command not found."
-    exit 1
-fi
-
-if ! docker info &>/dev/null; then
-    log "ERROR: Docker daemon not running."
-    exit 1
-fi
+command -v docker &>/dev/null || { log "ERROR: Docker not found."; exit 1; }
+docker info &>/dev/null || { log "ERROR: Docker daemon not running."; exit 1; }
 
 cd "$REPO_DIR" || { log "ERROR: cannot change to $REPO_DIR"; exit 1; }
 
@@ -42,4 +33,3 @@ docker compose ps
 
 ELAPSED=$(( $(date +%s) - START_TIME ))
 log "Elapsed time: ${ELAPSED}s"
-log "=== mediastack update completed successfully ==="
