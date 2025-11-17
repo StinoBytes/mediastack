@@ -31,6 +31,18 @@ for img in $STACK_IMAGES; do
   docker image prune -f --filter "reference=$img"
 done
 
+log "Checking for dangling images..."
+STACK_IMAGES=$(docker compose config --images)
+for img in $STACK_IMAGES; do
+  log "Removing unused images for $img ..."
+  UNUSED_IMAGES=$(docker images --quiet --filter=reference="$img" --filter=dangling=true)
+  if [ -n "$UNUSED_IMAGES" ]; then
+    docker image rm -f $UNUSED_IMAGES
+  else
+    log "No unused images found for $img."
+  fi
+done
+
 log "Container status after update:"
 docker compose ps
 
