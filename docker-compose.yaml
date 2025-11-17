@@ -3,8 +3,6 @@ services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
-    labels:
-      - "mediastack=true"
     networks:
       - mediastack
     devices:
@@ -29,8 +27,6 @@ services:
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
     container_name: jellyseerr
-    labels:
-      - "mediastack=true"
     networks:
       - mediastack
     environment:
@@ -49,8 +45,6 @@ services:
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
-    labels:
-      - "mediastack=true"
     networks:
       - mediastack
     environment:
@@ -69,8 +63,6 @@ services:
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
-    labels:
-      - "mediastack=true"
     networks:
       - mediastack
     environment:
@@ -89,8 +81,6 @@ services:
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
-    labels:
-      - "mediastack=true"
     networks:
       - mediastack
     environment:
@@ -108,8 +98,6 @@ services:
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
-    labels:
-      - "mediastack=true"
     networks:
       - mediastack
     environment:
@@ -128,8 +116,6 @@ services:
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
-    labels:
-      - "mediastack=true"
     networks:
       - mediastack
     environment:
@@ -151,8 +137,6 @@ services:
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
-    labels:
-      - "mediastack=true"
     networks:
       - mediastack
     environment:
