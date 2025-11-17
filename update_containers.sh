@@ -25,8 +25,11 @@ docker compose pull
 log "Bringing stack up (rebuild as needed)..."
 docker compose up -d --build
 
-log "Pruning unused images for mediastack…"
-docker image prune -f --filter "label=mediastack"
+STACK_IMAGES=$(docker compose config --images)
+for img in $STACK_IMAGES; do
+  log "Pruning unused images for $img ..."
+  docker image prune -f --filter "reference=$img"
+done
 
 log "Container status after update:"
 docker compose ps
