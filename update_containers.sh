@@ -5,7 +5,7 @@ set -euo pipefail
 export PATH="/usr/local/bin:/usr/bin:/bin"
 
 START_TIME=$(date +%s)
-REPO_DIR="$(pwd)"
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG_DIR="$REPO_DIR/update_logs"
 mkdir -p "$LOG_DIR"
 LOGFILE="$LOG_DIR/$(date '+%Y_%m_%d').log"
