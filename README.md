@@ -1,15 +1,16 @@
 # Media Stack
 
-| Service      | Port | Description                                              |
-| ------------ | ---- | -------------------------------------------------------- |
-| Jellyfin     | 8096 | Media streaming server                                   |
-| Jellyseerr   | 5055 | Jellyfin request manager                                 |
-| Radarr       | 7878 | Movie manager                                            |
-| Sonarr       | 8989 | TV Show manager                                          |
-| Prowlarr     | 9696 | Indexer manager for Sonarr/Radarr                        |
-| Bazarr       | 6767 | Subtitle manager                                         |
-| qBittorrent  | 8080 | Torrent client                                           |
-| Flaresolverr | 8091 | Optional, to be able to use certain indexers in Prowlarr |
+| Service      | Port | Description                                                 |
+| ------------ | ---- | ----------------------------------------------------------- |
+| Jellyfin     | 8096 | Media streaming server                                      |
+| Jellyseerr   | 5055 | Jellyfin request manager                                    |
+| Radarr       | 7878 | Movie manager                                               |
+| Sonarr       | 8989 | TV Show manager                                             |
+| Prowlarr     | 9696 | Indexer manager for Sonarr/Radarr                           |
+| Bazarr       | 6767 | Subtitle manager                                            |
+| Lingarr      | 9876 | Subtitle translator when no non-English subtitles are found |
+| qBittorrent  | 8080 | Torrent client                                              |
+| Flaresolverr | 8091 | Optional, to be able to use certain indexers in Prowlarr    |
 
 ## 1. Clone repository
 
@@ -28,7 +29,7 @@ cd mediastack
 Creates the necessary folder structure for the project:
 
 ```bash
-mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr config/flaresolverr
+mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr config/flaresolverr config/lingarr
 ```
 
 (Optional) Sets the correct ownership to the newly created folders, just to be sure.
@@ -124,6 +125,10 @@ docker compose up -d
 - Add Radarr and Sonarr with API keys.
 
 That should be it, you can select movies and shows in Jellyseer, the mediastack will do the rest! Once downloaded, you can watch with Jellyfin.
+
+#### Lingarr - http://localhost:9876
+
+-TBD
 
 ## 6. Updating and stopping the containers
 

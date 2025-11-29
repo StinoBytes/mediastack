@@ -114,6 +114,27 @@ services:
       - 6767:6767
     restart: unless-stopped
 
+  # Subtitle translator
+  lingarr:
+    image: lingarr/lingarr:latest
+    container_name: lingarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - ASPNETCORE_URLS=http://+:9876
+      - RADARR_URL=http://radarr:7878
+      - SONARR_URL=http://sonarr:8989
+      - SERVICE_TYPE=deepl # Supported values: libretranslate*, openai, anthropic, localai, deepl, google, bing, microsoft, yandex. *For libretranslate you need to add the libretranslate container as well.
+    volumes:
+      - ${CONFIG_DIR}/lingarr:/app/config
+      - ${TV_DIR}:/app/media/tv
+      - ${MOVIE_DIR}:/app/media/movies
+    ports:
+      - 9876:9876
+    restart: unless-stopped
+
   # Torrent client
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
