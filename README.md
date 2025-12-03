@@ -1,16 +1,17 @@
 # Media Stack
 
-| Service      | Port | Description                                                 |
-| ------------ | ---- | ----------------------------------------------------------- |
-| Jellyfin     | 8096 | Media streaming server                                      |
-| Jellyseerr   | 5055 | Jellyfin request manager                                    |
-| Radarr       | 7878 | Movie manager                                               |
-| Sonarr       | 8989 | TV Show manager                                             |
-| Prowlarr     | 9696 | Indexer manager for Sonarr/Radarr                           |
-| Bazarr       | 6767 | Subtitle manager                                            |
-| Lingarr      | 9876 | Subtitle translator when no non-English subtitles are found |
-| qBittorrent  | 8080 | Torrent client                                              |
-| Flaresolverr | 8091 | Optional, to be able to use certain indexers in Prowlarr    |
+| Service      | Port  | Description                                                           |
+| ------------ | ----- | --------------------------------------------------------------------- |
+| Jellyfin     | 8096  | Media streaming server                                                |
+| Jellyseerr   | 5055  | Jellyfin request manager                                              |
+| Radarr       | 7878  | Movie manager                                                         |
+| Sonarr       | 8989  | TV Show manager                                                       |
+| Prowlarr     | 9696  | Indexer manager for Sonarr/Radarr                                     |
+| Bazarr       | 6767  | Subtitle manager                                                      |
+| qBittorrent  | 8080  | Torrent client                                                        |
+| Flaresolverr | 8091  | Optional, to be able to use certain indexers in Prowlarr              |
+| Lingarr      | 9876  | Optional, subtitle translator when no non-English subtitles are found |
+| Ollama       | 11434 | Optional, LLM service for subtitle translation                        |
 
 ## 1. Clone repository
 

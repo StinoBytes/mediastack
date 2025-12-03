@@ -165,8 +165,8 @@ services:
       - LOCAL_AI_ENDPOINT=http://ollama:11434/api/generate/
     volumes:
       - ${CONFIG_DIR}/lingarr:/app/config
-      - ${TV_DIR}:/app/media/tv
-      - ${MOVIE_DIR}:/app/media/movies
+      - ${TV_DIR}:/data/tvshows
+      - ${MOVIE_DIR}:/data/movies
     ports:
       - 9876:9876
     restart: unless-stopped
