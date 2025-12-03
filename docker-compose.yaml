@@ -18,7 +18,7 @@ services:
       - ${MOVIE_DIR}:/data/movies
     ports:
       - 8096:8096
-      # - 8920:8920 # optional for https webUI, need to set up own ceritificate
+      # - 8920:8920 # optional for HTTPS webUI, need to set up own ceritificate
       - 7359:7359/udp # optional, autodiscovery
       - 1900:1900/udp # optional, autodiscovery
     restart: unless-stopped
@@ -114,27 +114,6 @@ services:
       - 6767:6767
     restart: unless-stopped
 
-  # Subtitle translator
-  lingarr:
-    image: lingarr/lingarr:latest
-    container_name: lingarr
-    networks:
-      - mediastack
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - ASPNETCORE_URLS=http://+:9876
-      - RADARR_URL=http://radarr:7878
-      - SONARR_URL=http://sonarr:8989
-      - SERVICE_TYPE=deepl # Supported values: libretranslate*, openai, anthropic, localai, deepl, google, bing, microsoft, yandex. *For libretranslate you need to add the libretranslate container as well.
-    volumes:
-      - ${CONFIG_DIR}/lingarr:/app/config
-      - ${TV_DIR}:/app/media/tv
-      - ${MOVIE_DIR}:/app/media/movies
-    ports:
-      - 9876:9876
-    restart: unless-stopped
-
   # Torrent client
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -168,6 +147,40 @@ services:
       - ${CONFIG_DIR}/flaresolverr:/config
     ports:
       - 8091:8091
+    restart: unless-stopped
+
+  # Optional, subtitle translator
+  lingarr:
+    image: lingarr/lingarr:latest
+    container_name: lingarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - ASPNETCORE_URLS=http://+:9876
+      - RADARR_URL=http://radarr:7878
+      - SONARR_URL=http://sonarr:8989
+      - SERVICE_TYPE=localai
+      - LOCAL_AI_ENDPOINT=http://ollama:11434/api/generate/
+    volumes:
+      - ${CONFIG_DIR}/lingarr:/app/config
+      - ${TV_DIR}:/app/media/tv
+      - ${MOVIE_DIR}:/app/media/movies
+    ports:
+      - 9876:9876
+    restart: unless-stopped
+
+  # Optional, LLM service for subtitle translation
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    networks:
+      - mediastack
+    ports:
+      - 11434:11434
+    volumes:
+      - ${CONFIG_DIR}/ollama:/root/.ollama
     restart: unless-stopped
 
 networks:

@@ -29,7 +29,7 @@ cd mediastack
 Creates the necessary folder structure for the project:
 
 ```bash
-mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr config/flaresolverr config/lingarr
+mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr config/flaresolverr config/lingarr config/ollama
 ```
 
 (Optional) Sets the correct ownership to the newly created folders, just to be sure.
@@ -126,9 +126,23 @@ docker compose up -d
 
 That should be it, you can select movies and shows in Jellyseer, the mediastack will do the rest! Once downloaded, you can watch with Jellyfin.
 
+#### Ollama
+
+> [!TIP]
+> Ollama and Lingarr are optional for when subtitles are not found in your language, it uses a local LLM for translating the subtitles.
+> If you do not want this, you can safely comment out or delete the Ollama and Lingarr services in the `docker-compose.yaml` file.
+
+Install an LLM for subtitle translation. Example is for Dutch translation but you can find different models for different languages here: https://ollama.com/library
+
+```bash
+docker exec -it ollama ollama pull jobautomation/openeurollm-dutch:latest
+```
+
 #### Lingarr - http://localhost:9876
 
--TBD
+- Go to `Settings > Integrations` and set the API keys for Radarr and Sonarr.
+- Go to `Settings > Services` and set the preferred AI model (same as the one you installed in the previous step), source and target languages.
+- In `Settings > Automation` you can optionally enable automated translation, this will automatically translate subtitles that are not found once a day.
 
 ## 6. Updating and stopping the containers
 
