@@ -1,20 +1,22 @@
 # Media Stack
 
-| Service      | Port | Description                                              |
-| ------------ | ---- | -------------------------------------------------------- |
-| Jellyfin     | 8096 | Media streaming server                                   |
-| Jellyseerr   | 5055 | Jellyfin request manager                                 |
-| Radarr       | 7878 | Movie manager                                            |
-| Sonarr       | 8989 | TV Show manager                                          |
-| Prowlarr     | 9696 | Indexer manager for Sonarr/Radarr                        |
-| Bazarr       | 6767 | Subtitle manager                                         |
-| qBittorrent  | 8080 | Torrent client                                           |
-| Flaresolverr | 8091 | Optional, to be able to use certain indexers in Prowlarr |
+| Service      | Port  | Description                                                           |
+| ------------ | ----- | --------------------------------------------------------------------- |
+| Jellyfin     | 8096  | Media streaming server                                                |
+| Jellyseerr   | 5055  | Jellyfin request manager                                              |
+| Radarr       | 7878  | Movie manager                                                         |
+| Sonarr       | 8989  | TV Show manager                                                       |
+| Prowlarr     | 9696  | Indexer manager for Sonarr/Radarr                                     |
+| Bazarr       | 6767  | Subtitle manager                                                      |
+| qBittorrent  | 8080  | Torrent client                                                        |
+| Flaresolverr | 8091  | Optional, to be able to use certain indexers in Prowlarr              |
+| Lingarr      | 9876  | Optional, subtitle translator when no non-English subtitles are found |
+| Ollama       | 11434 | Optional, LLM service for subtitle translation                        |
 
 ## 1. Clone repository
 
 ```bash
-git clone https://github.com/StinoBytes/mediastack.git
+git clone https://github.com/shilkens/mediastack.git
 ```
 
 And move to the cloned directory:
@@ -28,10 +30,10 @@ cd mediastack
 Creates the necessary folder structure for the project:
 
 ```bash
-mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr config/flaresolverr
+mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr config/flaresolverr config/lingarr config/ollama
 ```
 
-(Optional) Sets the correct ownership to the newly created folders, just to be sure.
+(Optional) Sets the correct ownership to the newly created folders, just to be sure for when a folder was created by Docker Compose instead of the user.
 
 ```bash
 sudo chown -R $(id -u):$(id -g) downloads media config
@@ -39,7 +41,7 @@ sudo chown -R $(id -u):$(id -g) downloads media config
 
 ## 3. Generate the .env file
 
-This will create the necessary .env file which the Docker containers will use.
+This will create the necessary .env file which the Docker Containers will use.
 
 ```bash
 printf 'PUID=%s\nPGID=%s\nTZ=%s\nCONFIG_DIR=${PWD}/config\nDOWNLOAD_DIR=${PWD}/downloads\nTV_DIR=${PWD}/media/tv\nMOVIE_DIR=${PWD}/media/movies\nSERVER_URL=http://%s\n' \
@@ -125,6 +127,24 @@ docker compose up -d
 
 That should be it, you can select movies and shows in Jellyseer, the mediastack will do the rest! Once downloaded, you can watch with Jellyfin.
 
+#### Ollama
+
+> [!TIP]
+> Ollama and Lingarr are optional for when subtitles are not found in your language, it uses a local LLM for translating the subtitles.
+> If you do not want this, you can safely comment out or delete the Ollama and Lingarr services in the `docker-compose.yaml` file.
+
+Install a LLM for subtitle translation. Example is for Dutch translation but you can find different models for different languages here: https://ollama.com/library
+
+```bash
+docker exec -it ollama ollama pull jobautomation/openeurollm-dutch:latest
+```
+
+#### Lingarr - http://localhost:9876
+
+- Go to `Settings > Integrations` and set the API keys for Radarr and Sonarr.
+- Go to `Settings > Services` and set the preferred AI model (same as the one you installed in the previous step), source and target languages.
+- In `Settings > Automation` you can optionally enable automated translation, this will automatically translate subtitles that are not found once a day.
+
 ## 6. Updating and stopping the containers
 
 To update the containers manually, execute in root folder of the project (where the docker-compose.yaml file is).
@@ -137,11 +157,6 @@ docker compose up -d --build
 # 3. Remove old images of this container stack
 docker image prune -f --filter "label=mediastack"
 ```
-
-Or you can run the `update_containers.sh` script for a more automatic approach.
-
-> [!TIP]
-> If you run the `update_containers.sh` script through a cron job (for example weekly), you don't have to worry about updating yourself and always have the latest versions.<br>More info about cron jobs: https://www.geeksforgeeks.org/linux-unix/crontab-in-linux-with-examples/
 
 To stop the containers:
 

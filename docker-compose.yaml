@@ -6,7 +6,7 @@ services:
     networks:
       - mediastack
     devices:
-      - /dev/dri:/dev/dri # HW acceleration for Intel/ATI/AMD. Comment block if you have issues
+      - /dev/dri:/dev/dri # HW acceleration for Intel/ATI/AMD. Comment if you have issues
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -18,7 +18,7 @@ services:
       - ${MOVIE_DIR}:/data/movies
     ports:
       - 8096:8096
-      # - 8920:8920 # optional for https webUI, need to set up own ceritificate
+      # - 8920:8920 # optional for HTTPS webUI, need to set up own ceritificate
       - 7359:7359/udp # optional, autodiscovery
       - 1900:1900/udp # optional, autodiscovery
     restart: unless-stopped
@@ -147,6 +147,38 @@ services:
       - ${CONFIG_DIR}/flaresolverr:/config
     ports:
       - 8091:8091
+    restart: unless-stopped
+
+  # Optional, subtitle translator
+  lingarr:
+    image: lingarr/lingarr:latest
+    container_name: lingarr
+    networks:
+      - mediastack
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - ASPNETCORE_URLS=http://+:9876
+      - RADARR_URL=http://radarr:7878
+      - SONARR_URL=http://sonarr:8989
+    volumes:
+      - ${CONFIG_DIR}/lingarr:/app/config
+      - ${TV_DIR}:/data/tvshows
+      - ${MOVIE_DIR}:/data/movies
+    ports:
+      - 9876:9876
+    restart: unless-stopped
+
+  # Optional, LLM service for subtitle translation
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    networks:
+      - mediastack
+    ports:
+      - 11434:11434
+    volumes:
+      - ${CONFIG_DIR}/ollama:/root/.ollama
     restart: unless-stopped
 
 networks:
