@@ -16,7 +16,7 @@
 ## 1. Clone repository
 
 ```bash
-git clone https://github.com/StinoBytes/mediastack.git
+git clone https://github.com/shilkens/mediastack.git
 ```
 
 And move to the cloned directory:
@@ -33,7 +33,7 @@ Creates the necessary folder structure for the project:
 mkdir -p downloads media/movies media/tv config/jellyfin config/jellyseerr config/radarr config/sonarr config/prowlarr config/qbittorrent config/qbittorrent_cache config/bazarr config/flaresolverr config/lingarr config/ollama
 ```
 
-(Optional) Sets the correct ownership to the newly created folders, just to be sure.
+(Optional) Sets the correct ownership to the newly created folders, just to be sure for when a folder was created by Docker Compose instead of the user.
 
 ```bash
 sudo chown -R $(id -u):$(id -g) downloads media config
@@ -41,7 +41,7 @@ sudo chown -R $(id -u):$(id -g) downloads media config
 
 ## 3. Generate the .env file
 
-This will create the necessary .env file which the Docker containers will use.
+This will create the necessary .env file which the Docker Containers will use.
 
 ```bash
 printf 'PUID=%s\nPGID=%s\nTZ=%s\nCONFIG_DIR=${PWD}/config\nDOWNLOAD_DIR=${PWD}/downloads\nTV_DIR=${PWD}/media/tv\nMOVIE_DIR=${PWD}/media/movies\nSERVER_URL=http://%s\n' \
@@ -133,7 +133,7 @@ That should be it, you can select movies and shows in Jellyseer, the mediastack 
 > Ollama and Lingarr are optional for when subtitles are not found in your language, it uses a local LLM for translating the subtitles.
 > If you do not want this, you can safely comment out or delete the Ollama and Lingarr services in the `docker-compose.yaml` file.
 
-Install an LLM for subtitle translation. Example is for Dutch translation but you can find different models for different languages here: https://ollama.com/library
+Install a LLM for subtitle translation. Example is for Dutch translation but you can find different models for different languages here: https://ollama.com/library
 
 ```bash
 docker exec -it ollama ollama pull jobautomation/openeurollm-dutch:latest
@@ -157,11 +157,6 @@ docker compose up -d --build
 # 3. Remove old images of this container stack
 docker image prune -f --filter "label=mediastack"
 ```
-
-Or you can run the `update_containers.sh` script for a more automatic approach.
-
-> [!TIP]
-> If you run the `update_containers.sh` script through a cron job (for example weekly), you don't have to worry about updating yourself and always have the latest versions.<br>More info about cron jobs: https://www.geeksforgeeks.org/linux-unix/crontab-in-linux-with-examples/
 
 To stop the containers:
 
